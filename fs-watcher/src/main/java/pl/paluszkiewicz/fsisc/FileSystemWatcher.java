@@ -20,7 +20,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-public class FileSystemWatcher implements SecretSourceWatcher<FileSecretPath, FileSecret, FsStartConfig>,
+public class FileSystemWatcher implements SecretSourceWatcher<Path, FileSecret, FsStartConfig>,
         Closeable {
 
     private static final Logger LOG = LoggerFactory.getLogger(FileSystemWatcher.class);
@@ -40,8 +40,8 @@ public class FileSystemWatcher implements SecretSourceWatcher<FileSecretPath, Fi
     }
 
     @Override
-    public WatchResult watch(FileSecretPath key, SecretChangedCallback<FileSecret> callback) {
-        subscriptions.put(key.path(), new ClosingCallback<>(callback));
+    public WatchResult watch(Path key, SecretChangedCallback<FileSecret> callback) {
+        subscriptions.put(key, new ClosingCallback<>(callback));
         LOG.debug("Registered watch for file: {}", key);
         return WatchResult.ok();
     }

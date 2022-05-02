@@ -20,7 +20,7 @@ public class FsLoggingSample {
         Path example = Path.of("example.txt");
         FileSystemWatcher fsWatcher = FileSystemWatcher.defaultWatcher(root);
         RefreshableSecret<FileSecret> secret = RefreshableSecret.nullOnDelete();
-        var result = fsWatcher.watch(new FileSecretPath(example), secret);
+        var result = fsWatcher.watch(example, secret);
         if (!result.isOk()) {
             String error = result.error().map(e -> "Error: " + e).orElse("No error specified");
             LOG.error("Could not watch path: " + example + ". Error was: " + error);

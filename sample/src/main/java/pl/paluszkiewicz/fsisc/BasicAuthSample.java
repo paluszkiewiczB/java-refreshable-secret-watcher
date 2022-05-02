@@ -40,7 +40,7 @@ public class BasicAuthSample {
 
         FileSystemWatcher fsWatcher = FileSystemWatcher.defaultWatcher(root);
         RefreshableSecret<FileSecret> secret = RefreshableSecret.nullOnDelete();
-        fsWatcher.watch(FileSecretPath.of("basicAuth.txt"), secret);
+        fsWatcher.watch(Path.of("basicAuth.txt"), secret);
 
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         FsStartConfig startConfig = new FsStartConfig(executorService);

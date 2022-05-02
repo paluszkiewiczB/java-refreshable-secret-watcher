@@ -35,11 +35,11 @@ public class PollingJob implements Runnable {
             ENTRY_MODIFY, EDIT
     );
 
-    private final ConcurrentHashMap<Path, SecretChangedCallback<FileSecretSource>> subscriptions;
+    private final ConcurrentHashMap<Path, SecretChangedCallback<FileSecret>> subscriptions;
     private final WatchKey watchKey;
     private final Path root;
 
-    public PollingJob(ConcurrentHashMap<Path, SecretChangedCallback<FileSecretSource>> subscriptions,
+    public PollingJob(ConcurrentHashMap<Path, SecretChangedCallback<FileSecret>> subscriptions,
             WatchKey watchKey, Path root) {
         this.subscriptions = subscriptions;
         this.watchKey = watchKey;
@@ -81,17 +81,17 @@ public class PollingJob implements Runnable {
                 );
     }
 
-    private record PathEvent(Path path, Kind<Path> kind, BiConsumer<WatchEventType, FileSecretSource> consumer) {
+    private record PathEvent(Path path, Kind<Path> kind, BiConsumer<WatchEventType, FileSecret> consumer) {
 
         void handleAs(WatchEventType type) {
-            FileSecretSource source = type == DELETE ? null : secretSource(path);
+            FileSecret source = type == DELETE ? null : secretSource(path);
             consumer.accept(type, source);
         }
 
-        private FileSecretSource secretSource(Path file) {
+        private FileSecret secretSource(Path file) {
             try {
                 var is = Files.newInputStream(file, StandardOpenOption.READ);
-                return new FileSecretSource(is);
+                return new FileSecret(is);
             } catch (IOException e) {
                 throw new RuntimeException("Could not open input stream to path: " + file, e);
             }

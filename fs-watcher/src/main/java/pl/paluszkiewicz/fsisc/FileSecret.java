@@ -3,7 +3,7 @@ package pl.paluszkiewicz.fsisc;
 import java.io.IOException;
 import java.io.InputStream;
 
-record FileSecretSource(InputStream inputStream) implements SecretSource, AutoCloseable {
+record FileSecret(InputStream inputStream) implements Secret, AutoCloseable {
 
     @Override
     public char[] secret() {

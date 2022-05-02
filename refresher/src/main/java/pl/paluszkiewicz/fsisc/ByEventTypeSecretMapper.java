@@ -4,9 +4,9 @@ import java.util.function.BiFunction;
 
 import pl.paluszkiewicz.fsisc.SecretSourceWatcher.WatchEventType;
 
-public abstract class ByEventTypeSecretMapper<S extends SecretSource> implements BiFunction<WatchEventType, S, char[]> {
+public abstract class ByEventTypeSecretMapper<S extends Secret> implements BiFunction<WatchEventType, S, char[]> {
 
-    public static <S extends SecretSource> ByEventTypeSecretMapper<S> nullOnDelete() {
+    public static <S extends Secret> ByEventTypeSecretMapper<S> nullOnDelete() {
         return new NullOnDelete<>();
     }
 
@@ -25,7 +25,7 @@ public abstract class ByEventTypeSecretMapper<S extends SecretSource> implements
         };
     }
 
-    private static final class NullOnDelete<S extends SecretSource> extends ByEventTypeSecretMapper<S> {
+    private static final class NullOnDelete<S extends Secret> extends ByEventTypeSecretMapper<S> {
 
         @Override
         public char[] onCreate(S source) {

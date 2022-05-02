@@ -39,7 +39,7 @@ public class BasicAuthSample {
         Path root = Path.of("secrets");
 
         FileSystemWatcher fsWatcher = FileSystemWatcher.defaultWatcher(root);
-        RefreshableSecret<FileSecretSource> secret = RefreshableSecret.nullOnDelete();
+        RefreshableSecret<FileSecret> secret = RefreshableSecret.nullOnDelete();
         fsWatcher.watch(FileSecretPath.of("basicAuth.txt"), secret);
 
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -66,10 +66,10 @@ public class BasicAuthSample {
     private static final class HttpProtectedClient {
 
         private final HttpClient client;
-        private final SecretSource secret;
+        private final Secret secret;
         private final URI uri;
 
-        private HttpProtectedClient(URI uri, SecretSource secret) {
+        private HttpProtectedClient(URI uri, Secret secret) {
             this.secret = secret;
             this.client = HttpClient.newHttpClient();
             this.uri = uri;

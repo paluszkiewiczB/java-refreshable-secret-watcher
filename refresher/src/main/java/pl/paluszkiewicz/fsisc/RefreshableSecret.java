@@ -2,16 +2,16 @@ package pl.paluszkiewicz.fsisc;
 
 import pl.paluszkiewicz.fsisc.SecretSourceWatcher.WatchEventType;
 
-public class RefreshableSecret<S extends SecretSource> implements SecretChangedCallback<S>, SecretSource {
+public class RefreshableSecret<S extends Secret> implements SecretChangedCallback<S>, Secret {
 
     private final ByEventTypeSecretMapper<S> sourceMapper;
     private final GuardedSecret secret;
 
-    public static <S extends SecretSource> RefreshableSecret<S> nullOnDelete() {
+    public static <S extends Secret> RefreshableSecret<S> nullOnDelete() {
         return new RefreshableSecret<>(ByEventTypeSecretMapper.nullOnDelete());
     }
 
-    public static <S extends SecretSource> RefreshableSecret<S> nullOnDelete(char[] initial) {
+    public static <S extends Secret> RefreshableSecret<S> nullOnDelete(char[] initial) {
         return new RefreshableSecret<>(ByEventTypeSecretMapper.nullOnDelete(), initial);
     }
 

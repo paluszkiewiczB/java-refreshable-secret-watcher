@@ -19,7 +19,7 @@ public class FsLoggingSample {
         Path root = Path.of("secrets");
         Path example = Path.of("example.txt");
         FileSystemWatcher fsWatcher = FileSystemWatcher.defaultWatcher(root);
-        RefreshableSecret<FileSecretSource> secret = RefreshableSecret.nullOnDelete();
+        RefreshableSecret<FileSecret> secret = RefreshableSecret.nullOnDelete();
         var result = fsWatcher.watch(new FileSecretPath(example), secret);
         if (!result.isOk()) {
             String error = result.error().map(e -> "Error: " + e).orElse("No error specified");
@@ -42,9 +42,9 @@ public class FsLoggingSample {
 
         private static final Logger LOG = getLogger(SecretConsumer.class);
 
-        private final SecretSource secret;
+        private final Secret secret;
 
-        SecretConsumer(SecretSource secret) {
+        SecretConsumer(Secret secret) {
             this.secret = secret;
             ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
             executor.scheduleAtFixedRate(this::logSecret, 1, 1, SECONDS);

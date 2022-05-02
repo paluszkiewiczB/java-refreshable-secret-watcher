@@ -1,6 +1,6 @@
 package pl.paluszkiewicz.fsisc;
 
-public class StringSecret implements SecretSource{
+public class StringSecret implements Secret {
     private final String secret;
 
     public StringSecret(String secret) {

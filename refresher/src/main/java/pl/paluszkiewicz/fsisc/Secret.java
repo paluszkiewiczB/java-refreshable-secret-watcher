@@ -1,6 +1,6 @@
 package pl.paluszkiewicz.fsisc;
 
-public interface SecretSource {
+public interface Secret {
 
     char[] secret();
 }

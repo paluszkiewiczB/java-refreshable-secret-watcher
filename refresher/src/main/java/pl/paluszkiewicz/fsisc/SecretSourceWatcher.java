@@ -7,7 +7,7 @@ import java.util.Optional;
 * S - type of source of the secret
 * C - type of configuration for the system passed to method start
 */
-public interface SecretSourceWatcher<K, S extends SecretSource, C> {
+public interface SecretSourceWatcher<K, S extends Secret, C> {
 
     WatchResult watch(K key, SecretChangedCallback<S> changesConsumer);
 

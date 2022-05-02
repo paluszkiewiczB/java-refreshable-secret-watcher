@@ -30,7 +30,7 @@ class ClosingCallbackSpec extends Specification {
     }
 
     @AutoImplement
-    private static final class CloseableSecret implements SecretSource, AutoCloseable {
+    private static final class CloseableSecret implements Secret, AutoCloseable {
         private boolean closed = false
 
         @Override

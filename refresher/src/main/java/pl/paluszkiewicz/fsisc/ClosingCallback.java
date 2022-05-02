@@ -5,7 +5,7 @@ import pl.paluszkiewicz.fsisc.SecretSourceWatcher.WatchEventType;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class ClosingCallback<S extends SecretSource & AutoCloseable> implements SecretChangedCallback<S> {
+public class ClosingCallback<S extends Secret & AutoCloseable> implements SecretChangedCallback<S> {
 
     private static final Logger LOG = getLogger(ClosingCallback.class);
 

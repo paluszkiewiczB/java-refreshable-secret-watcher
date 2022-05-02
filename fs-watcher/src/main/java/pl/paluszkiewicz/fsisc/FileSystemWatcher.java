@@ -20,12 +20,12 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-public class FileSystemWatcher implements SecretSourceWatcher<FileSecretPath, FileSecretSource, FsStartConfig>,
+public class FileSystemWatcher implements SecretSourceWatcher<FileSecretPath, FileSecret, FsStartConfig>,
         Closeable {
 
     private static final Logger LOG = LoggerFactory.getLogger(FileSystemWatcher.class);
 
-    private final ConcurrentHashMap<Path, SecretChangedCallback<FileSecretSource>> subscriptions = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Path, SecretChangedCallback<FileSecret>> subscriptions = new ConcurrentHashMap<>();
     private final WatchService watchService;
     private final Path root;
 
@@ -40,7 +40,7 @@ public class FileSystemWatcher implements SecretSourceWatcher<FileSecretPath, Fi
     }
 
     @Override
-    public WatchResult watch(FileSecretPath key, SecretChangedCallback<FileSecretSource> callback) {
+    public WatchResult watch(FileSecretPath key, SecretChangedCallback<FileSecret> callback) {
         subscriptions.put(key.path(), new ClosingCallback<>(callback));
         LOG.debug("Registered watch for file: {}", key);
         return WatchResult.ok();
@@ -53,14 +53,14 @@ public class FileSystemWatcher implements SecretSourceWatcher<FileSecretPath, Fi
                 .allMatch(yr -> yr.yielded && yr.error() == null);
     }
 
-    private YieldResult yieldIfPresent(Path path, SecretChangedCallback<FileSecretSource> callback) {
+    private YieldResult yieldIfPresent(Path path, SecretChangedCallback<FileSecret> callback) {
         if (!Files.exists(path)) {
             return new YieldResult(false, null);
         }
 
         try {
             InputStream is = Files.newInputStream(path);
-            callback.accept(WatchEventType.CREATE, new FileSecretSource(is));
+            callback.accept(WatchEventType.CREATE, new FileSecret(is));
             return new YieldResult(true, null);
         } catch (IOException e) {
             return new YieldResult(false, e);

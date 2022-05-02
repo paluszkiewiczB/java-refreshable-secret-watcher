@@ -4,7 +4,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class GuardedSecret implements SecretSource {
+public class GuardedSecret implements Secret {
 
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private char[] value;

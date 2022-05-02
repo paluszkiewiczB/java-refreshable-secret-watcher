@@ -1,10 +1,15 @@
 package pl.paluszkiewicz.fsisc;
 
-public class StringSecret implements Secret {
+class StaticSecret implements Secret {
+
     private final String secret;
 
-    public StringSecret(String secret) {
+    public StaticSecret(String secret) {
         this.secret = secret;
+    }
+
+    public StaticSecret(char[] secret) {
+        this.secret = new String(secret);
     }
 
     @Override

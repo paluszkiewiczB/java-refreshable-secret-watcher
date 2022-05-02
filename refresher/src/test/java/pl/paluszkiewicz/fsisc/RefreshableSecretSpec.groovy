@@ -11,7 +11,7 @@ class RefreshableSecretSpec extends Specification {
         given:
             def secret = RefreshableSecret.nullOnDelete()
         when:
-            secret.accept(CREATE, new StringSecret("value"))
+            secret.accept(CREATE, Secret.of("value"))
         then:
             "value" == new String(secret.secret())
         when:

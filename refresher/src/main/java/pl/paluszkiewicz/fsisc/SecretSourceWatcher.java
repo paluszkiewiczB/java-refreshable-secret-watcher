@@ -2,9 +2,14 @@ package pl.paluszkiewicz.fsisc;
 
 import java.util.Optional;
 
-public interface SecretSourceWatcher<P extends SecretPath, S extends SecretSource, C extends StartConfig> {
+/*
+* K - type of key of the secret
+* S - type of source of the secret
+* C - type of configuration for the system passed to method start
+*/
+public interface SecretSourceWatcher<K, S extends SecretSource, C> {
 
-    WatchResult watch(P path, SecretChangedCallback<S> changesConsumer);
+    WatchResult watch(K key, SecretChangedCallback<S> changesConsumer);
 
     boolean start(C config);
 

@@ -40,9 +40,9 @@ public class FileSystemWatcher implements SecretSourceWatcher<FileSecretPath, Fi
     }
 
     @Override
-    public WatchResult watch(FileSecretPath path, SecretChangedCallback<FileSecretSource> callback) {
-        subscriptions.put(path.path(), new ClosingCallback<>(callback));
-        LOG.debug("Registered watch for file: {}", path);
+    public WatchResult watch(FileSecretPath key, SecretChangedCallback<FileSecretSource> callback) {
+        subscriptions.put(key.path(), new ClosingCallback<>(callback));
+        LOG.debug("Registered watch for file: {}", key);
         return WatchResult.ok();
     }
 

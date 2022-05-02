@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.sun.nio.file.SensitivityWatchEventModifier;
@@ -48,22 +49,20 @@ public class FileSystemWatcher implements SecretSourceWatcher<Path, FileSecret, 
 
     private boolean yieldInitialValues() {
         return subscriptions.entrySet().stream()
-                .map(e -> yieldIfPresent(root.resolve(e.getKey()), e.getValue()))
-                .peek(yr -> LOG.debug("Yielded: {}, error: {}", yr.yielded, yr.error))
-                .allMatch(yr -> yr.yielded && yr.error() == null);
+                .filter(e -> Files.exists(e.getKey()))
+                .map(e -> tryToYield(root.resolve(e.getKey()), e.getValue()))
+                .flatMap(Optional::stream)
+                .peek(yr -> LOG.debug("Exception when yielding initial value for path: {}", yr.path, yr.throwable()))
+                .count() != 0;
     }
 
-    private YieldResult yieldIfPresent(Path path, SecretChangedCallback<FileSecret> callback) {
-        if (!Files.exists(path)) {
-            return new YieldResult(false, null);
-        }
-
+    private Optional<YieldingError> tryToYield(Path path, SecretChangedCallback<FileSecret> callback) {
         try {
             InputStream is = Files.newInputStream(path);
             callback.accept(WatchEventType.CREATE, new FileSecret(is));
-            return new YieldResult(true, null);
+            return Optional.empty();
         } catch (IOException e) {
-            return new YieldResult(false, e);
+            return Optional.of(new YieldingError(path, e));
         }
     }
 
@@ -105,11 +104,11 @@ public class FileSystemWatcher implements SecretSourceWatcher<Path, FileSecret, 
         }
     }
 
-    private record WatchRootResult(WatchKey key, Exception exception) {
+    private record WatchRootResult(WatchKey key, Throwable exception) {
 
     }
 
-    private record YieldResult(boolean yielded, Throwable error) {
+    private record YieldingError(Path path, Throwable throwable) {
 
     }
 }

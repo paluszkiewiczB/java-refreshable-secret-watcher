@@ -90,21 +90,6 @@ public class BasicAuthSample {
             return Optional.of("Basic " + new Credentials(lines).encodeBase64());
         }
 
-        private record Credentials(String user, String pwd) {
-
-            private static final Encoder ENCODER = Base64.getEncoder();
-
-            Credentials(List<String> list) {
-                this(list.get(0), list.get(1));
-            }
-
-            String encodeBase64() {
-                String formatted = "%s:%s".formatted(user, pwd);
-                byte[] bytes = formatted.getBytes(UTF_8);
-                return new String(ENCODER.encode(bytes));
-            }
-        }
-
         int get() {
             var builder = HttpRequest.newBuilder().GET().uri(this.uri);
             basicAuthHeader().ifPresentOrElse(
@@ -145,6 +130,21 @@ public class BasicAuthSample {
             } catch (IOException | InterruptedException e) {
                 LOG.error("Could not send GET to the server. Error was: ", e);
                 return -1;
+            }
+        }
+
+        private record Credentials(String user, String pwd) {
+
+            private static final Encoder ENCODER = Base64.getEncoder();
+
+            Credentials(List<String> list) {
+                this(list.get(0), list.get(1));
+            }
+
+            String encodeBase64() {
+                String formatted = "%s:%s".formatted(user, pwd);
+                byte[] bytes = formatted.getBytes(UTF_8);
+                return new String(ENCODER.encode(bytes));
             }
         }
     }

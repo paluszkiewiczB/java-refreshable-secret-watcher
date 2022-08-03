@@ -19,17 +19,23 @@ public class GuardedSecret implements Secret {
 
     public void write(char[] newValue) {
         Lock lock = this.lock.writeLock();
-        lock.lock();
-        this.value = copy(newValue);
-        lock.unlock();
+        try {
+            lock.lock();
+            this.value = copy(newValue);
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
     public char[] secret() {
         Lock lock = this.lock.readLock();
-        lock.lock();
-        char[] toReturn = copy(value);
-        lock.unlock();
+        try {
+            lock.lock();
+            char[] toReturn = copy(value);
+        } finally {
+            lock.unlock();    
+        }
         return toReturn;
     }
 

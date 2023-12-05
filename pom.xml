@@ -20,7 +20,7 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <slf4j-api.version>1.7.36</slf4j-api.version>
-        <logback.version>1.2.11</logback.version>
+        <logback.version>1.2.13</logback.version>
         <gmavenplus-plugin.version>1.12.0</gmavenplus-plugin.version>
         <groovy.version>3.0.10</groovy.version>
         <spock.version>2.1-groovy-3.0</spock.version>
